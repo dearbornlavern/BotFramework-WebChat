@@ -6,6 +6,8 @@ import minNumActivitiesShown from './setup/conditions/minNumActivitiesShown';
 import staticSpinner from './setup/assets/staticSpinner';
 import uiConnected from './setup/conditions/uiConnected';
 
+var fs = require('fs');
+
 // selenium-webdriver API doc:
 // https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_WebDriver.html
 
@@ -22,11 +24,21 @@ const allOutgoingMessagesFailed = new Condition('All outgoing messages to fail s
   });
 });
 
+function sleep(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+
 describe('offline UI', async () => {
   test('git push testing', async () => {
-    console.log("begin git push testing");
+    console.log('begin git push testing');
     const gittest2 = require('./gitpushtest');
-    return (1);  // We want this test to fail.
+    while (!fs.existsSync('xxx_gittest_finished_flag.txt')) {
+      await sleep(1000);
+      console.log('...waiting...');
+    }
+    return 1; // We want this test to fail.
   });
 
   test('should show "Taking longer than usual to connect" UI when connection is slow', async () => {
